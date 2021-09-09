@@ -10,12 +10,12 @@ http://kazu-s-diary-2.cocolog-nifty.com/blog/2016/07/htajquerymark-1.html
 
 ・Markdown記法が使える。
 
-　いまさらかもしれないが、以前から興味があったMarkdown記法の変換ルールを採用した。
-  そのために以下のｊｓファイル＋ｃｓｓを移植。
+　使っているライブラリ
+　・marked.js（一部改造）　https://github.com/markedjs/marked
 
-　・marked.js（一部改造）
-　・github-markdown.css
-　・jquery-1.12.0.js
+・github-markdown.css　　https://github.com/sindresorhus/github-markdown-css
+
+・jquery-1.12.0.js　https://code.jquery.com/jquery/
  
 ・テキストファイルの保存機能
 

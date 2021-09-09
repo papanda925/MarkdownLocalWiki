@@ -1,0 +1,35 @@
+# MarkdownLocalWiki
+MarkDown記法が使える、ディスクトップ上で動くwiki
+個人ブログで管理していたものをGitHubに展開
+
+http://kazu-s-diary-2.cocolog-nifty.com/blog/2016/07/htajquerymark-1.html
+
+・サーバ不要、WindowsOSであれば利用可能
+
+・Markdown記法が使える。
+
+　いまさらかもしれないが、以前から興味があったMarkdown記法の変換ルールを採用した。
+  そのために以下のｊｓファイル＋ｃｓｓを移植。
+
+　・marked.js（一部改造）
+　・github-markdown.css
+　・jquery-1.12.0.js
+ 
+・テキストファイルの保存機能
+
+　marked.jsを修正し、リンクのルール「( aaaa  )[ aaaa ]　」の中でURL等以外は、テキストファイル(aaaa.md)保存するように改造している。
+
+テキストファイル(aaaa.md)は、リンクのルール「( aaaa  )[ aaaa ]　」によりファイルリンクされるようにしている。
+
+・テキストファイル以外は、ブラウザ等の外部アプリを利用するように修正。
+
+・いわゆるファイルサーバ（\\コンピュータ名）でもリンクされるように機能追加。
+
+追伸：
+まだまだ改良の余地あるツールで、作者も勉強途中ですが。
+このツール（手法）に興味を持っていただき、さらに改良にチャレンジされた方がいらっしゃり、とてもうれしい。
+こちらにリンクを張っておきます。
+
+https://github.com/ma34s/MarkdownLocalWiki
+
+https://qiita.com/hachimitu22/items/5bba11ab89b556b810b4

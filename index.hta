@@ -1,10 +1,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta name="viewport" content="width=360,initial-scale=1">
 <html lang="ja">
 <head>
 <hta:application navigable="yes">
 
 
-<link rel="stylesheet" href="./core/github.css">
+<link rel="stylesheet" href="./core/github-markdown.css">
 <script src="./core/jquery-1.12.4.js"></script>
 <script src="./core/marked.js"></script>
 <script>
@@ -13,6 +14,12 @@
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 var oBaseFolder = getBaseFolder();
 var pageNameStack = new Array();
+
+var x = 100;
+function larger()  { x *= 1.2; document.getElementById('content').style.fontSize = x + '%'; }
+function smaller() { x /= 1.2; document.getElementById('content').style.fontSize = x + '%'; }
+
+
 
 //このHTMLファイルが置かれているフォルダのパス名を取得する
 function getBaseFolder(){
@@ -465,5 +472,9 @@ function DeletePage() {
             </td>
         </tr>
     </table>
+
+<button type="button" onclick="smaller()">小さく</button>
+<button type="button" onclick="larger()">大きく</button>
+
 </body>
 </html>

@@ -1,7 +1,9 @@
 # MarkdownLocalWiki
 MarkDown記法が使える、ディスクトップ上で動くwiki
-個人ブログで管理していたものをGitHubに展開
+個人ブログで管理していたものを今更ながらGitHubに展開したもの
+今更ながらGitHubにも挑戦中
 
+ベース：
 http://kazu-s-diary-2.cocolog-nifty.com/blog/2016/07/htajquerymark-1.html
 
 ・サーバ不要、WindowsOSであれば利用可能

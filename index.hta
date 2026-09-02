@@ -23,7 +23,24 @@ function smaller() { x /= 1.2; document.getElementById('content').style.fontSize
 
 //このHTMLファイルが置かれているフォルダのパス名を取得する
 function getBaseFolder(){
-    return fso.GetFolder(".");
+    var currentPath = decodeURI(window.location.pathname).replace(/\//g, "\\");
+    if (/^\\[A-Za-z]:\\/.test(currentPath)) {
+        currentPath = currentPath.substring(1);
+    }
+    return fso.GetFolder(fso.GetParentFolderName(currentPath));
+}
+
+//ページ名をファイル名として安全に使えるか確認する。
+//Wikiフォルダー外を指す「..」や、Windowsで使用できない文字を拒否する。
+function validatePageName(pagename) {
+    var normalizedPageName = String(pagename || "").replace(/^\s+|\s+$/g, "");
+    var invalidCharacters = /[\\\/:*?"<>|\x00-\x1F]/;
+
+    if (!normalizedPageName || normalizedPageName === "." || normalizedPageName === ".." || invalidCharacters.test(normalizedPageName)) {
+        throw new Error("ページ名に使用できない文字が含まれています。");
+    }
+
+    return normalizedPageName;
 }
 
 
@@ -188,16 +205,14 @@ function edit(pagename){
 
 //いま見ているページを編集する
 function editCurrentPage(){
-    pagename = id('headerH1').innerText;
+    var pagename = id('headerH1').innerText;
     edit(pagename);
 }
 
 //フォームのテキストエリアの中身を、指定したページのコンテンツとして保存する
 function save(pagename){
 
-//編集方法の修正 textareaへの格納はフォーム生成後のtextareaへテキスト入力
-//    var content = id('textarea').value;
-    var content = id('textarea').innerText;
+    var content = id('textarea').value;
 
     var filepath = getFilePath(pagename);
     var file = fso.createTextFile(filepath);
@@ -258,7 +273,7 @@ function openIndexPage(){
 
 //ページ名を指定して、該当するマークダウン（.md)のパス名を取得する
 function getFilePath(pagename){
-    var filename = pagename + ".md";
+    var filename = validatePageName(pagename) + ".md";
     return oBaseFolder.Path + "\\" +  filename;
 }
 
@@ -386,10 +401,12 @@ function openAndSerch(pagename) {
 
 //新規作成
 function NewPage() {
-    var pagename = Text2.value;
-//    window.confirm(pagename);
-    if (pagename) {
+    try {
+        var pagename = validatePageName(Text2.value);
         open(pagename);
+    }
+    catch (error) {
+        window.alert(error.message);
     }
     Text2.value = '';
 }
@@ -397,7 +414,15 @@ function NewPage() {
 function ReNamePage() {
 
     var srcPagename = getPageName();
-    var dstPagename = Text2.value;
+    var dstPagename;
+
+    try {
+        dstPagename = validatePageName(Text2.value);
+    }
+    catch (error) {
+        window.alert(error.message);
+        return;
+    }
 
     // 「OK」時の処理開始 ＋ 確認ダイアログの表示
     if (window.confirm(dstPagename + ' にリネームしますか？'))
@@ -405,6 +430,11 @@ function ReNamePage() {
 
         var srcFilepath = getFilePath(srcPagename);
         var dstFilepath = getFilePath(dstPagename);
+
+        if (fso.FileExists(dstFilepath)) {
+            window.alert(dstPagename + ' は既に存在します。');
+            return;
+        }
     
         fso.MoveFile(srcFilepath, dstFilepath);
         window.alert(srcPagename + ' を ' + dstPagename + ' にリネームしました。');         
@@ -421,10 +451,14 @@ function DeletePage() {
 
     var pagename = getPageName();
 
+    if (pagename === 'トップページ') {
+        window.alert('トップページは削除できません。');
+        return;
+    }
+
     // 「OK」時の処理開始 ＋ 確認ダイアログの表示
     if (window.confirm(pagename + ' を削除しますか？')) {
 
-        var pagename = getPageName();
         var filepath = getFilePath(pagename);
 
         fso.DeleteFile(filepath);
